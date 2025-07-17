@@ -42,7 +42,7 @@ const FakeNewsDetector = () => {
     setShowMetrics(false);
 
     try {
-      const mainUrl = "https://fakenewsdetectionmodel.onrender.com";
+      const mainUrl = import.meta.env.VITE_SERVER_URL;
       const response = await fetch(`${mainUrl}/analyze`, {
         method: "POST",
         headers: {
