@@ -1,5 +1,5 @@
 import { useAuth } from "../contexts/AuthContext";
-import AuthToggle from "./AuthToggle";
+import AuthToggle from "./AuthPage";
 import HomeScreen from "./HomePage";
 
 const LoadingSpinner = () => (

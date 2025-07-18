@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import HomeScreen from "./pages/HomePage";
-import AuthToggle from "./pages/AuthToggle";
+import AuthToggle from "./pages/AuthPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import LoadingPage from "./pages/LoadingPage";
 import { useAuth } from "./contexts/AuthContext";

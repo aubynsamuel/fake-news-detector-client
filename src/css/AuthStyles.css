@@ -1,0 +1,276 @@
+/* AuthToggle.css */
+.auth-container {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: var(--background-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.auth-container.dark {
+  background-color: var(--background-dark);
+}
+
+.auth-wrapper {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-logo {
+  display: inline-block;
+  padding: 1rem;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.auth-logo svg {
+  color: white;
+}
+
+.auth-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.dark .auth-title {
+  color: var(--text-dark);
+}
+
+.auth-subtitle {
+  color: #64748b;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.dark .auth-subtitle {
+  color: #94a3b8;
+}
+
+.auth-form-container {
+  background-color: var(--card-light);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.dark .auth-form-container {
+  background-color: var(--card-dark);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.dark .form-label {
+  color: var(--text-dark);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon-left {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.input-icon-right {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.input-icon-right:hover {
+  color: #4b5563;
+}
+
+.dark .input-icon-right:hover {
+  color: #d1d5db;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  padding-left: 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 0.5rem;
+  background-color: var(--background-light);
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.form-input.has-right-icon {
+  padding-right: 2.5rem;
+}
+
+.dark .form-input {
+  border-color: var(--border-dark);
+  background-color: var(--card-dark);
+  color: var(--text-dark);
+}
+
+.dark .form-input::placeholder {
+  color: #6b7280;
+}
+
+.error-message {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 5px solid #ef4444;
+  color: #991b1b;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.dark .error-message {
+  background-color: #450a0a;
+  border-color: #7f1d1d;
+  color: #fecaca;
+}
+
+.error-message p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.submit-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #2563eb;
+}
+
+.submit-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading-content {
+  display: flex;
+  align-items: center;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  margin-left: -0.25rem;
+  margin-right: 0.75rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: white;
+}
+
+.loading-spinner circle {
+  opacity: 0.25;
+}
+
+.loading-spinner path {
+  opacity: 0.75;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toggle-text {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.dark .toggle-text {
+  color: #94a3b8;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  font-weight: 500;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.toggle-button:hover {
+  color: #1d4ed8;
+}
+

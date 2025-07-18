@@ -119,7 +119,7 @@ const FakeNewsDetector: React.FC = () => {
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="hero-title">
-              TruthGuard: Your Shield Against Misinformation
+              Truth Guard: Your Shield Against Misinformation
             </h1>
 
             <p className="hero-subtitle">
