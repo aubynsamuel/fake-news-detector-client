@@ -79,6 +79,7 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
 
             <nav className="sidebar-nav">
               <a
+                href="#"
                 onClick={() => {
                   navigate("/home");
                   toggleSideBar();
@@ -88,7 +89,9 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
                 <FaRobot size={18} />
                 <span>Home</span>
               </a>
+
               <a
+                href="#"
                 onClick={() => {
                   navigate("/history");
                   toggleSideBar();
@@ -98,18 +101,21 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
                 <History size={18} />
                 <span>Search History</span>
               </a>
+
               <a href="#" onClick={handleSettingsNav} className="nav-item">
                 <Edit3 size={18} />
                 <span>Settings</span>
               </a>
-              <a href="#" className="nav-item">
+
+              {/* <a href="#" className="nav-item">
                 <FaQuestionCircle size={18} />
                 <span>Support</span>
               </a>
+
               <a href="#" className="nav-item">
                 <FaInfoCircle size={18} />
                 <span>About</span>
-              </a>
+              </a> */}
             </nav>
 
             <div className="sidebar-footer">
