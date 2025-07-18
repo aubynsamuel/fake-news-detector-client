@@ -1,6 +1,7 @@
 import React from "react";
 import { FaSun, FaMoon, FaRobot } from "react-icons/fa";
 import { Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   darkMode: boolean;
@@ -13,6 +14,8 @@ const Header: React.FC<HeaderProps> = ({
   setDarkMode,
   toggleSideBar,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <header className="header">
       <div className="header-content">
@@ -20,7 +23,10 @@ const Header: React.FC<HeaderProps> = ({
           <button className="sidebar-toggle" onClick={toggleSideBar}>
             <Menu />
           </button>
-          <a href="/" className="logo">
+          <a
+            onClick={() => navigate("/home")}
+            className="logo hover:cursor-pointer"
+          >
             <FaRobot className="logo-icon" />
             <span className="logo-text">TruthGuard</span>
           </a>

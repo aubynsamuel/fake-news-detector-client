@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import HomeScreen from "./pages/HomePage";
 import AuthToggle from "./pages/AuthPage";
+import SettingsPage from "./pages/SettingsPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import LoadingPage from "./pages/LoadingPage";
 import { useAuth } from "./contexts/AuthContext";
@@ -84,6 +85,15 @@ const Navigation = () => {
             <PublicRoute>
               <AuthToggle />
             </PublicRoute>
+          }
+        />
+        {/* Catch all route - redirect to home */}
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
           }
         />
         {/* Catch all route - redirect to home */}

@@ -1,0 +1,225 @@
+.settings-page {
+  padding: 2rem 8rem;
+  /* max-width: 768px; */
+  /* margin: 0 auto; */
+}
+
+.settings-container {
+  background-color: var(--card-light);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+[data-theme="dark"] .settings-container {
+  background-color: var(--card-dark);
+}
+
+.settings-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+[data-theme="dark"] .settings-title {
+  color: var(--text-dark);
+}
+
+.message-box {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  /* align-items: center; */
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  /* margin-bottom: 1.5rem; */
+  font-size: 0.875rem;
+}
+
+.message-box.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+[data-theme="dark"] .message-box.success {
+  background-color: #1d4ed8;
+  color: #d1fae5;
+  border-color: #34d399;
+}
+
+.message-box.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+[data-theme="dark"] .message-box.error {
+  background-color: #be123c;
+  color: #fecaca;
+  border-color: #ef4444;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+[data-theme="dark"] .settings-section {
+  border-bottom-color: var(--border-dark);
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="dark"] .section-title {
+  color: var(--text-dark);
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+[data-theme="dark"] .form-label {
+  color: var(--text-dark);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon-left {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.input-icon-right {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.input-icon-right:hover {
+  color: #4b5563;
+}
+
+[data-theme="dark"] .input-icon-right:hover {
+  color: #d1d5db;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  padding-left: 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 0.5rem;
+  background-color: var(--background-light);
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-input.has-right-icon {
+  padding-right: 2.5rem;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+[data-theme="dark"] .form-input {
+  border-color: var(--border-dark);
+  background-color: var(--card-dark);
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .form-input::placeholder {
+  color: #6b7280;
+}
+
+.submit-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #2563eb;
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 0rem 0rem;
+  }
+}

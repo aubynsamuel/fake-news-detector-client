@@ -3,7 +3,7 @@ import React from "react";
 const Footer: React.FC = () => {
   return (
     <footer className="footer">
-      <p>&copy; 2025 TruthGuard. All Rights Reserved.</p>
+      <p>&copy; 2025 Truth Guard. All Rights Reserved.</p>
     </footer>
   );
 };

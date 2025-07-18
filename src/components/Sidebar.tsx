@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase";
-import { FaQuestionCircle, FaInfoCircle } from "react-icons/fa";
+import { FaQuestionCircle, FaInfoCircle, FaRobot } from "react-icons/fa";
 import { User, LogOut, Edit3, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -25,8 +25,9 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
     }
   };
 
-  const handleEditProfile = () => {
-    alert("Edit profile functionality is not yet implemented.");
+  const handleSettingsNav = () => {
+    navigate("/settings");
+    toggleSideBar();
   };
 
   const backdropVariants = {
@@ -71,17 +72,29 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
                 <User size={32} />
               </div>
               <h3 className="profile-name">Welcome back!</h3>
-              <p className="profile-email">{user?.email || "user@example.com"}</p>
+              <p className="profile-email">
+                {user?.email || "user@example.com"}
+              </p>
             </div>
 
             <nav className="sidebar-nav">
-              <a href="#" onClick={handleEditProfile} className="nav-item">
+              <a
+                onClick={() => {
+                  navigate("/home");
+                  toggleSideBar();
+                }}
+                className="nav-item"
+              >
+                <FaRobot size={18} />
+                <span>Home</span>
+              </a>
+              <a href="#" onClick={handleSettingsNav} className="nav-item">
                 <Edit3 size={18} />
-                <span>Edit Profile</span>
+                <span>Settings</span>
               </a>
               <a href="#" className="nav-item">
                 <FaQuestionCircle size={18} />
-                <span>Help & Support</span>
+                <span>Support</span>
               </a>
               <a href="#" className="nav-item">
                 <FaInfoCircle size={18} />
