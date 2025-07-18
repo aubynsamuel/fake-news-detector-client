@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import "../css/App.css";
-import "../css/FontAwesome.css";
+import React, { useState, useEffect, useRef } from "react";
 import { FakeNewsAnalysis } from "../types";
 import Header from "../components/Header";
 import HeadlineInput from "../components/HeadlineInput";
@@ -9,15 +7,18 @@ import Error from "../components/Error";
 import MetricsExplanation from "../components/MetricsExplanation";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
+import { motion, AnimatePresence } from "framer-motion";
+import { mockData } from "../data/mockServerResponse";
 
-const FakeNewsDetector = () => {
+const FakeNewsDetector: React.FC = () => {
   const [headline, setHeadline] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<FakeNewsAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [darkMode, setDarkMode] = useState(false);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [showMetrics, setShowMetrics] = useState(false);
+
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -28,9 +29,7 @@ const FakeNewsDetector = () => {
         "Could not connect to the analysis service. Please try again later."
       );
     }
-  }, []);
 
-  useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       setDarkMode(true);
@@ -45,17 +44,14 @@ const FakeNewsDetector = () => {
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
-  // Handle body scroll when sidebar is open
   useEffect(() => {
     if (isSideBarOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "auto";
     }
-
-    // Cleanup on unmount
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "auto";
     };
   }, [isSideBarOpen]);
 
@@ -69,23 +65,28 @@ const FakeNewsDetector = () => {
     setLoading(true);
     setResults(null);
     setError(null);
-    setShowMetrics(false);
 
     try {
       const mainUrl = import.meta.env.VITE_SERVER_URL;
-      const response = await fetch(`${mainUrl}/analyze`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ headline: headline }),
-      });
-      const data = await response.json();
+      // const response = await fetch(`${mainUrl}/analyze`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ headline: trimmedHeadline }),
+      // });
 
-      console.log(data);
+      // if (!response.ok) {
+      //   setError("An error occurred. Please try again later.");
+      // }
 
+      // const data = await response.json();
+      const data = mockData;
       setResults(data);
-      setShowMetrics(true);
+
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     } catch (err) {
       setError(
         "Could not connect to the analysis service. Please try again later."
@@ -96,52 +97,85 @@ const FakeNewsDetector = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && e.ctrlKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
       analyzeHeadline();
     }
   };
 
-  const toggleSideBar = (value: boolean) => {
-    setIsSideBarOpen(value);
-  };
-
   return (
-    <div className="container">
-      <Sidebar isVisible={isSideBarOpen} toggleSideBar={toggleSideBar} />
+    <div className={`container-fluid ${darkMode ? "dark" : ""}`}>
+      <Sidebar
+        isVisible={isSideBarOpen}
+        toggleSideBar={() => setIsSideBarOpen(false)}
+      />
       <Header
         darkMode={darkMode}
         setDarkMode={setDarkMode}
-        toggleSideBar={toggleSideBar}
+        toggleSideBar={() => setIsSideBarOpen(true)}
       />
 
-      <div className="main-body">
-        <p className="teaser-message">
-          Your intelligent assistant for verifying news headlines with advanced
-          AI analysis.
-        </p>
+      <main className="main-content">
+        <section className="hero-section">
+          <div className="hero-content">
+            <h1 className="hero-title">
+              TruthGuard: Your Shield Against Misinformation
+            </h1>
 
-        <HeadlineInput
-          headline={headline}
-          setHeadline={setHeadline}
-          handleKeyDown={handleKeyDown}
-          analyzeHeadline={analyzeHeadline}
-          loading={loading}
-        />
-
-        {loading && (
-          <div className="loading">
-            <div className="spinner"></div>
-            <p>Analyzing... please wait.</p>
+            <p className="hero-subtitle">
+              Your intelligent assistant for verifying news headlines with
+              advanced AI analysis
+            </p>
+            <HeadlineInput
+              headline={headline}
+              setHeadline={setHeadline}
+              handleKeyDown={handleKeyDown}
+              analyzeHeadline={analyzeHeadline}
+              loading={loading}
+            />
           </div>
-        )}
+        </section>
 
-        {results && <Results results={results} />}
-        {error && <Error error={error} />}
+        <AnimatePresence>
+          {loading && (
+            <motion.div
+              className="loading-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <div className="spinner"></div>
+              <p>Analyzing... please wait.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {showMetrics && <MetricsExplanation />}
-      </div>
+        <div ref={resultsRef} className="results-container">
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <Error error={error} />
+              </motion.div>
+            )}
+            {results && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <Results results={results} />
+                <MetricsExplanation />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </main>
 
-      <Footer />
+      {results && <Footer />}
     </div>
   );
 };

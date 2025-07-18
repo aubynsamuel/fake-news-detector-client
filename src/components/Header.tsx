@@ -1,11 +1,11 @@
 import React from "react";
-import * as FA from "react-icons/fa";
-import { Menu, SidebarOpenIcon } from "lucide-react";
+import { FaSun, FaMoon, FaRobot } from "react-icons/fa";
+import { Menu } from "lucide-react";
 
 interface HeaderProps {
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
-  toggleSideBar: (value: boolean) => void;
+  toggleSideBar: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -14,27 +14,33 @@ const Header: React.FC<HeaderProps> = ({
   toggleSideBar,
 }) => {
   return (
-    <div className="header">
-      <div className="flex flex-row gap-3 items-center">
-        <SidebarOpenIcon onClick={() => toggleSideBar((p) => !p)} />
-        <a href="/" className="logo">
-          <FA.FaRobot className="fas fa-robot"></FA.FaRobot>
-          <h5>Fake News Detector</h5>
-        </a>
+    <header className="header">
+      <div className="header-content">
+        <div className="flex ">
+          <button className="sidebar-toggle" onClick={toggleSideBar}>
+            <Menu />
+          </button>
+          <a href="/" className="logo">
+            <FaRobot className="logo-icon" />
+            <span className="logo-text">TruthGuard</span>
+          </a>
+        </div>
+        <div className="header-actions">
+          <div className="theme-switcher">
+            <FaSun className={`icon ${!darkMode ? "active" : ""}`} />
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={darkMode}
+                onChange={(e) => setDarkMode(e.target.checked)}
+              />
+              <span className="slider round"></span>
+            </label>
+            <FaMoon className={`icon ${darkMode ? "active" : ""}`} />
+          </div>
+        </div>
       </div>
-      <div className="theme-switcher">
-        <FA.FaSun className="fas fa-sun"></FA.FaSun>
-        <label className="switch">
-          <input
-            type="checkbox"
-            checked={darkMode}
-            onChange={(e) => setDarkMode(e.target.checked)}
-          />
-          <span className="slider round"></span>
-        </label>
-        <FA.FaMoon className="fas fa-moon"></FA.FaMoon>
-      </div>
-    </div>
+    </header>
   );
 };
 

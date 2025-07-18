@@ -1,5 +1,5 @@
-import React from 'react';
-import * as FA from 'react-icons/fa';
+import React from "react";
+import { FaSearch, FaSpinner } from "react-icons/fa";
 
 interface HeadlineInputProps {
   headline: string;
@@ -9,38 +9,41 @@ interface HeadlineInputProps {
   loading: boolean;
 }
 
-const HeadlineInput: React.FC<HeadlineInputProps> = ({ headline, setHeadline, handleKeyDown, analyzeHeadline, loading }) => {
+const HeadlineInput: React.FC<HeadlineInputProps> = ({
+  headline,
+  setHeadline,
+  handleKeyDown,
+  analyzeHeadline,
+  loading,
+}) => {
   return (
-    <div className="input-section">
-      <div className="input-group">
-        <label htmlFor="headline">Enter News Headline</label>
-        <textarea
-          id="headline"
-          value={headline}
-          onChange={(e) => setHeadline(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="e.g., 'New study reveals surprising benefits of chocolate...'"
-        />
-      </div>
-      <div className="analyze-btn-container">
-        <button
-          className="analyze-btn"
-          onClick={analyzeHeadline}
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <FA.FaSpinner className="fas fa-spinner fa-spin"></FA.FaSpinner>{" "}
-              Analyzing...
-            </>
-          ) : (
-            <>
-              <FA.FaSearchengin className="fas fa-search"></FA.FaSearchengin>{" "}
-              Analyze
-            </>
-          )}
-        </button>
-      </div>
+    <div className="input-area">
+      <textarea
+        id="headline"
+        value={headline}
+        onChange={(e) => setHeadline(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="e.g. New study reveals surprising benefits of chocolate..."
+        className="headline-textarea"
+        rows={3}
+      />
+      <button
+        className="analyze-button"
+        onClick={analyzeHeadline}
+        disabled={loading}
+      >
+        {loading ? (
+          <>
+            <FaSpinner className="animate-spin" />
+            <span>Analyzing...</span>
+          </>
+        ) : (
+          <>
+            <FaSearch />
+            <span>Analyze</span>
+          </>
+        )}
+      </button>
     </div>
   );
 };
