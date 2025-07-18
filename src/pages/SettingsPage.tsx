@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import {
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from "firebase/auth";
+import { sendPasswordResetEmail } from "../lib/utils";
 import { doc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../config/firebase";
-import { Lock, User, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { db } from "../config/firebase";
+import { User, AlertCircle } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
@@ -15,9 +11,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [username, setUsername] = useState(user?.displayName || "");
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -25,9 +18,7 @@ const SettingsPage: React.FC = () => {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState(user?.email || "");
 
   const handleUpdateUsername = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,48 +44,24 @@ const SettingsPage: React.FC = () => {
     }
   };
 
-  const handleUpdatePassword = async (e: React.FormEvent) => {
+  const handleSendPasswordResetEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
     setLoading(true);
 
-    if (!user) {
-      setMessage({ type: "error", text: "User not logged in." });
+    if (!resetEmail) {
+      setMessage({ type: "error", text: "Please enter your email address." });
       setLoading(false);
       return;
     }
 
-    if (newPassword !== confirmNewPassword) {
-      setMessage({ type: "error", text: "New passwords do not match." });
-      setLoading(false);
-      return;
+    const result = await sendPasswordResetEmail(resetEmail);
+    if (result.success) {
+      setMessage({ type: "success", text: result.message });
+    } else {
+      setMessage({ type: "error", text: result.message });
     }
-
-    if (newPassword.length < 6) {
-      setMessage({
-        type: "error",
-        text: "Password should be at least 6 characters.",
-      });
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const credential = EmailAuthProvider.credential(
-        user.email!,
-        currentPassword
-      );
-      await reauthenticateWithCredential(user, credential);
-      await updatePassword(user, newPassword);
-      setMessage({ type: "success", text: "Password updated successfully!" });
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmNewPassword("");
-    } catch (error: any) {
-      setMessage({ type: "error", text: error.message });
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   return (
@@ -171,77 +138,26 @@ const SettingsPage: React.FC = () => {
           </div>
 
           <div className="settings-section">
-            <h2 className="section-title">Change Password</h2>
-            <form onSubmit={handleUpdatePassword} className="settings-form">
+            <h2 className="section-title">Reset Password</h2>
+            <form
+              onSubmit={handleSendPasswordResetEmail}
+              className="settings-form"
+            >
               <div className="form-group">
-                <label htmlFor="current-password" className="form-label">
-                  Current Password
+                <label htmlFor="reset-email" className="form-label">
+                  Email Address
                 </label>
                 <div className="input-wrapper">
-                  <Lock className="input-icon-left" />
+                  <User className="input-icon-left" />
                   <input
-                    id="current-password"
-                    type={showCurrentPassword ? "text" : "password"}
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="form-input has-right-icon"
-                    placeholder="Enter current password"
+                    id="reset-email"
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    className="form-input"
+                    placeholder="Enter your email for password reset"
                     required
                   />
-                  <div
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className="input-icon-right"
-                  >
-                    {showCurrentPassword ? <EyeOff /> : <Eye />}
-                  </div>
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="new-password" className="form-label">
-                  New Password
-                </label>
-                <div className="input-wrapper">
-                  <Lock className="input-icon-left" />
-                  <input
-                    id="new-password"
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="form-input has-right-icon"
-                    placeholder="Enter new password"
-                    required
-                  />
-                  <div
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="input-icon-right"
-                  >
-                    {showNewPassword ? <EyeOff /> : <Eye />}
-                  </div>
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="confirm-new-password" className="form-label">
-                  Confirm New Password
-                </label>
-                <div className="input-wrapper">
-                  <Lock className="input-icon-left" />
-                  <input
-                    id="confirm-new-password"
-                    type={showConfirmNewPassword ? "text" : "password"}
-                    value={confirmNewPassword}
-                    onChange={(e) => setConfirmNewPassword(e.target.value)}
-                    className="form-input has-right-icon"
-                    placeholder="Confirm new password"
-                    required
-                  />
-                  <div
-                    onClick={() =>
-                      setShowConfirmNewPassword(!showConfirmNewPassword)
-                    }
-                    className="input-icon-right"
-                  >
-                    {showConfirmNewPassword ? <EyeOff /> : <Eye />}
-                  </div>
                 </div>
               </div>
               <button
@@ -249,7 +165,7 @@ const SettingsPage: React.FC = () => {
                 className="submit-button"
                 disabled={loading}
               >
-                {loading ? "Updating..." : "Update Password"}
+                {loading ? "Sending..." : "Send Password Reset Email"}
               </button>
             </form>
           </div>
