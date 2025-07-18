@@ -173,8 +173,8 @@
   text-align: center;
   position: fixed;
   z-index: 10;
-  bottom: 0;
-  right: 0;
+  bottom: 1rem;
+  right: 1rem;
   display: flex;
   gap: 0.75rem;
   padding: 1rem;

@@ -31,6 +31,12 @@ const SettingsPage: React.FC = () => {
       return;
     }
 
+    if (username.trim() === "") {
+      setMessage({ type: "error", text: "Username cannot be empty" });
+      setLoading(false);
+      return;
+    }
+
     try {
       // Update display name in Firebase Auth
       await updateDoc(doc(db, "users", user.uid), {
