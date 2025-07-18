@@ -35,7 +35,10 @@ const Results: React.FC<ResultsProps> = ({ results }) => {
     },
   };
 
-  if (!results) return null;
+  if (!results || !results.final_verdict || !results.final_verdict.score)
+    return (
+      <p className="text-center my-3 text-red-600">No results available</p>
+    );
 
   const { final_verdict, components } = results;
   const {
