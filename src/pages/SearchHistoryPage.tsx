@@ -14,8 +14,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import Results from "../components/Results";
-import { motion, AnimatePresence } from "framer-motion";
-import { History, ChevronLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { ChevronLeft } from "lucide-react";
 
 interface SearchHistoryEntry {
   id: string;
@@ -69,11 +69,22 @@ const SearchHistoryPage: React.FC = () => {
   }, [user]);
 
   const handleViewDetails = (result: FakeNewsAnalysis) => {
-    setSelectedResult(result);
+    try {
+      if (result && Object.keys(result).length > 0) {
+        setSelectedResult(result);
+        setError(null);
+      } else {
+        setError("Selected history item has no data to display.");
+      }
+    } catch (err) {
+      console.error("Error viewing details:", err);
+      setError("Failed to load details for the selected history item.");
+    }
   };
 
   const handleBackToList = () => {
     setSelectedResult(null);
+    setError(null);
   };
 
   return (
@@ -120,14 +131,21 @@ const SearchHistoryPage: React.FC = () => {
               {history.map((entry) => (
                 <div key={entry.id} className="history-item">
                   <div className="history-item-content">
-                    <p className="history-headline">{entry.headline}</p>
+                    <p className="history-headline">
+                      {entry.headline || "Headline not available"}
+                    </p>
                     <span className="history-date">
-                      {new Date(entry.timestamp?.toDate()).toLocaleString()}
+                      {entry.timestamp?.toDate
+                        ? new Date(entry.timestamp.toDate()).toLocaleString()
+                        : "Date not available"}
                     </span>
                   </div>
                   <button
                     onClick={() => handleViewDetails(entry.results)}
                     className="view-details-button"
+                    disabled={
+                      !entry.results || Object.keys(entry.results).length === 0
+                    }
                   >
                     View Details
                   </button>

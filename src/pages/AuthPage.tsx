@@ -14,15 +14,46 @@ const AuthToggle: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
 
+  const getFirebaseErrorMessage = (errorCode: string): string => {
+    switch (errorCode) {
+      case "auth/invalid-email":
+        return "Invalid email address format.";
+      case "auth/user-disabled":
+        return "This user account has been disabled.";
+      case "auth/user-not-found":
+        return "No user found with this email.";
+      case "auth/wrong-password":
+        return "Incorrect password.";
+      case "auth/email-already-in-use":
+        return "This email is already in use.";
+      case "auth/weak-password":
+        return "Password should be at least 6 characters.";
+      case "auth/operation-not-allowed":
+        return "Email/password accounts are not enabled.";
+      case "auth/network-request-failed":
+        return "Network error. Please check your internet connection.";
+      default:
+        return "An unexpected error occurred. Please try again.";
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccessMessage("");
     setLoading(true);
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      setLoading(false);
+      return;
+    }
 
     try {
       if (isSignIn) {
@@ -37,7 +68,7 @@ const AuthToggle: React.FC = () => {
         await setDoc(doc(db, "users", user.uid), { email: user.email });
       }
     } catch (err: any) {
-      setError(err.message);
+      setError(getFirebaseErrorMessage(err.code));
     } finally {
       setLoading(false);
     }
@@ -46,6 +77,7 @@ const AuthToggle: React.FC = () => {
   const toggleAuthMode = () => {
     setIsSignIn(!isSignIn);
     setError("");
+    setSuccessMessage("");
     setEmail("");
     setPassword("");
     setShowPassword(false);
@@ -55,6 +87,7 @@ const AuthToggle: React.FC = () => {
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccessMessage("");
     setLoading(true);
 
     if (!forgotPasswordEmail) {
@@ -63,15 +96,20 @@ const AuthToggle: React.FC = () => {
       return;
     }
 
-    const result = await sendPasswordResetEmail(forgotPasswordEmail);
-    if (result.success) {
-      setError(result.message); // Using error state to display success message for simplicity
-      setForgotPasswordEmail("");
-      setShowForgotPassword(false);
-    } else {
-      setError(result.message);
+    try {
+      const result = await sendPasswordResetEmail(forgotPasswordEmail);
+      if (result.success) {
+        setSuccessMessage(result.message);
+        setForgotPasswordEmail("");
+        setShowForgotPassword(false);
+      } else {
+        setError(result.message);
+      }
+    } catch (err: any) {
+      setError("Failed to send reset email. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -167,6 +205,12 @@ const AuthToggle: React.FC = () => {
                 </div>
               )}
 
+              {successMessage && (
+                <div className="success-message">
+                  <p>{successMessage}</p>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={loading}
@@ -224,6 +268,12 @@ const AuthToggle: React.FC = () => {
               {error && (
                 <div className="error-message">
                   <p>{error}</p>
+                </div>
+              )}
+
+              {successMessage && (
+                <div className="success-message">
+                  <p>{successMessage}</p>
                 </div>
               )}
 

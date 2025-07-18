@@ -62,13 +62,13 @@ const FakeNewsDetector: React.FC = () => {
   const analyzeHeadline = async () => {
     const trimmedHeadline = headline.trim();
     if (!trimmedHeadline) {
-      alert("Please enter a headline.");
+      setError("Please enter a headline to analyze.");
       return;
     }
 
     setLoading(true);
     setResults(null);
-    setError(null);
+    setError(null); // Clear previous errors
 
     try {
       const mainUrl = import.meta.env.VITE_SERVER_URL;
@@ -79,15 +79,33 @@ const FakeNewsDetector: React.FC = () => {
         },
         body: JSON.stringify({ headline: trimmedHeadline }),
       });
-      const data = await response.json();
 
-      // if (!response.ok) {
-      //   setError("An error occurred. Please try again later.");
-      // }
-      // const data = mockData;
+      if (!response.ok) {
+        // Handle HTTP errors (e.g., 400, 500)
+        const errorData = await response.json();
+        setError(
+          errorData.message || "An unexpected error occurred during analysis."
+        );
+        return;
+      }
+
+      const data: FakeNewsAnalysis = await response.json();
+
+      // Validate received data structure
+      if (
+        !data ||
+        typeof data.final_verdict.score !== "number" ||
+        typeof data.final_verdict.verdict !== "string"
+      ) {
+        setError(
+          "Received invalid analysis data from the server. Please try again."
+        );
+        return;
+      }
+
       setResults(data);
 
-      if (user) {
+      if (user && data) {
         try {
           await addDoc(
             collection(doc(db, "users", user.uid), "search_history"),
@@ -109,8 +127,9 @@ const FakeNewsDetector: React.FC = () => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 100);
     } catch (err) {
+      console.error("Network or parsing error:", err);
       setError(
-        "Could not connect to the analysis service. Please try again later."
+        "Could not connect to the analysis service. Please check your internet connection and try again."
       );
     } finally {
       setLoading(false);
@@ -118,7 +137,7 @@ const FakeNewsDetector: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && e.ctrlKey) {
       e.preventDefault();
       analyzeHeadline();
     }

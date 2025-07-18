@@ -20,6 +20,21 @@ const SettingsPage: React.FC = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState(user?.email || "");
 
+  const getFirebaseErrorMessage = (errorCode: string): string => {
+    switch (errorCode) {
+      case "auth/invalid-email":
+        return "Invalid email address format.";
+      case "auth/user-not-found":
+        return "No user found with this email.";
+      case "auth/network-request-failed":
+        return "Network error. Please check your internet connection.";
+      case "auth/too-many-requests":
+        return "Too many requests. Please try again later.";
+      default:
+        return "An unexpected error occurred. Please try again.";
+    }
+  };
+
   const handleUpdateUsername = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
@@ -32,19 +47,18 @@ const SettingsPage: React.FC = () => {
     }
 
     if (username.trim() === "") {
-      setMessage({ type: "error", text: "Username cannot be empty" });
+      setMessage({ type: "error", text: "Username cannot be empty." });
       setLoading(false);
       return;
     }
 
     try {
-      // Update display name in Firebase Auth
       await updateDoc(doc(db, "users", user.uid), {
         username: username,
       });
       setMessage({ type: "success", text: "Username updated successfully!" });
     } catch (error: any) {
-      setMessage({ type: "error", text: error.message });
+      setMessage({ type: "error", text: getFirebaseErrorMessage(error.code) });
     } finally {
       setLoading(false);
     }
@@ -61,13 +75,18 @@ const SettingsPage: React.FC = () => {
       return;
     }
 
-    const result = await sendPasswordResetEmail(resetEmail);
-    if (result.success) {
-      setMessage({ type: "success", text: result.message });
-    } else {
-      setMessage({ type: "error", text: result.message });
+    try {
+      const result = await sendPasswordResetEmail(resetEmail);
+      if (result.success) {
+        setMessage({ type: "success", text: result.message });
+      } else {
+        setMessage({ type: "error", text: result.message });
+      }
+    } catch (error: any) {
+      setMessage({ type: "error", text: "Failed to send reset email. Please try again." });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
