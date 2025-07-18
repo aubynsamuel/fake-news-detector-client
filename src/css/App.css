@@ -52,7 +52,7 @@ body {
 
 .logo {
   font-size: 1.5rem;
-  color: var(--primary-color);
+  color: white;
   display: flex;
   flex-direction: row;
   align-items: center;

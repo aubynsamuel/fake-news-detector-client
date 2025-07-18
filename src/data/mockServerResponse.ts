@@ -1,4 +1,4 @@
-import { FakeNewsAnalysis } from "./types";
+import { FakeNewsAnalysis } from "../types";
 
 export const mockData: FakeNewsAnalysis = {
   headline: "trimmedHeadline",
@@ -25,5 +25,3 @@ export const mockData: FakeNewsAnalysis = {
     claim_verification: { score: 0.32 },
   },
 };
-
-

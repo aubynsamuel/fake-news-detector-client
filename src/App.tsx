@@ -1,124 +1,104 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
-import "./FontAwesome.css";
-import { FakeNewsAnalysis } from "./types";
-import Header from "./components/Header";
-import HeadlineInput from "./components/HeadlineInput";
-import Results from "./components/Results";
-import Error from "./components/Error";
-import MetricsExplanation from "./components/MetricsExplanation";
-import Footer from "./components/Footer";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import HomeScreen from "./pages/HomePage";
+import AuthToggle from "./pages/AuthToggle";
+import { AuthProvider } from "./contexts/AuthContext";
+import LoadingPage from "./pages/LoadingPage";
+import { useAuth } from "./contexts/AuthContext";
 
-const FakeNewsDetector = () => {
-  const [headline, setHeadline] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<FakeNewsAnalysis | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [darkMode, setDarkMode] = useState(false);
-  const [showMetrics, setShowMetrics] = useState(false);
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    try {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/health`);
-    } catch (err) {
-      console.error("Error fetching health check:", err);
-      setError(
-        "Could not connect to the analysis service. Please try again later."
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-theme",
-      darkMode ? "dark" : "light"
-    );
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-
-  const analyzeHeadline = async () => {
-    const trimmedHeadline = headline.trim();
-    if (!trimmedHeadline) {
-      alert("Please enter a headline.");
-      return;
-    }
-
-    setLoading(true);
-    setResults(null);
-    setError(null);
-    setShowMetrics(false);
-
-    try {
-      const mainUrl = import.meta.env.VITE_SERVER_URL;
-      const response = await fetch(`${mainUrl}/analyze`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ headline: headline }),
-      });
-      const data = await response.json();
-
-      console.log(data);
-
-      setResults(data);
-      setShowMetrics(true);
-    } catch (err) {
-      setError(
-        "Could not connect to the analysis service. Please try again later."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && e.ctrlKey) {
-      analyzeHeadline();
-    }
-  };
-
-  return (
-    <div className="container">
-      <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-
-      <div className="main-body">
-        <p className="teaser-message">
-          Your intelligent assistant for verifying news headlines with advanced
-          AI analysis.
-        </p>
-
-        <HeadlineInput
-          headline={headline}
-          setHeadline={setHeadline}
-          handleKeyDown={handleKeyDown}
-          analyzeHeadline={analyzeHeadline}
-          loading={loading}
-        />
-
-        {loading && (
-          <div className="loading">
-            <div className="spinner"></div>
-            <p>Analyzing... please wait.</p>
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mb-6">
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
+              <div
+                className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"
+                style={{ animationDelay: "0.2s" }}
+              ></div>
+              <div
+                className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"
+                style={{ animationDelay: "0.4s" }}
+              ></div>
+            </div>
           </div>
-        )}
-
-        {results && <Results results={results} />}
-        {error && <Error error={error} />}
-
-        {showMetrics && <MetricsExplanation />}
+          <p className="text-slate-600 text-lg font-medium">Loading...</p>
+        </div>
       </div>
+    );
+  }
 
-      <Footer />
-    </div>
+  return user ? children : <Navigate to="/auth" replace />;
+};
+
+// Public Route Component (redirect to home if already authenticated)
+const PublicRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mb-6">
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
+              <div
+                className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"
+                style={{ animationDelay: "0.2s" }}
+              ></div>
+              <div
+                className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"
+                style={{ animationDelay: "0.4s" }}
+              ></div>
+            </div>
+          </div>
+          <p className="text-slate-600 text-lg font-medium">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return user ? <Navigate to="/home" replace /> : children;
+};
+
+const Navigation = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoadingPage />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <HomeScreen />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/auth"
+          element={
+            <PublicRoute>
+              <AuthToggle />
+            </PublicRoute>
+          }
+        />
+        {/* Catch all route - redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
-export default FakeNewsDetector;
+const App = () => {
+  return (
+    <AuthProvider>
+      <Navigation />
+    </AuthProvider>
+  );
+};
+
+export default App;

@@ -1,0 +1,60 @@
+/* Full screen centered background */
+.loading-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Spinner container */
+.spinner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  background-color: #3b82f6; /* blue-500 */
+  border-radius: 50%;
+  animation: pulse 1s infinite ease-in-out;
+}
+
+.delay-1 {
+  animation-delay: 0.2s;
+}
+.delay-2 {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Text styles */
+.text-box {
+  text-align: center;
+}
+
+.text-main {
+  color: #475569; /* slate-600 */
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.text-sub {
+  color: #94a3b8; /* slate-400 */
+  font-size: 0.875rem;
+}
