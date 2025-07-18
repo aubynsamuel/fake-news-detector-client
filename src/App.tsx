@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import HomeScreen from "./pages/HomePage";
 import AuthToggle from "./pages/AuthPage";
 import SettingsPage from "./pages/SettingsPage";
+import SearchHistoryPage from "./pages/SearchHistoryPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import LoadingPage from "./pages/LoadingPage";
 import { useAuth } from "./contexts/AuthContext";
@@ -93,6 +94,14 @@ const Navigation = () => {
           element={
             <ProtectedRoute>
               <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <SearchHistoryPage />
             </ProtectedRoute>
           }
         />

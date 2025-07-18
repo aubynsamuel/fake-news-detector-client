@@ -1,7 +1,5 @@
 .settings-page {
   padding: 2rem 8rem;
-  /* max-width: 768px; */
-  /* margin: 0 auto; */
 }
 
 .settings-container {
@@ -218,6 +216,12 @@
 
 @media (max-width: 768px) {
   .settings-page {
-    padding: 0rem 0rem;
+    padding: 0rem 0.5rem;
+  }
+  .settings-container {
+    background-color: transparent;
+  }
+  [data-theme="dark"] .settings-container {
+    background-color: transparent;
   }
 }

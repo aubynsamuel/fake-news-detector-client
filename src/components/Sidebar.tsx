@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { FaQuestionCircle, FaInfoCircle, FaRobot } from "react-icons/fa";
-import { User, LogOut, Edit3, X } from "lucide-react";
+import { User, LogOut, Edit3, X, History } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SideBarProps {
@@ -87,6 +87,16 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
               >
                 <FaRobot size={18} />
                 <span>Home</span>
+              </a>
+              <a
+                onClick={() => {
+                  navigate("/history");
+                  toggleSideBar();
+                }}
+                className="nav-item"
+              >
+                <History size={18} />
+                <span>Search History</span>
               </a>
               <a href="#" onClick={handleSettingsNav} className="nav-item">
                 <Edit3 size={18} />
