@@ -170,9 +170,16 @@
   border: 1px solid #fecaca;
   border-left: 5px solid #ef4444;
   color: #991b1b;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
   text-align: center;
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
 }
 
 .dark .error-message {
