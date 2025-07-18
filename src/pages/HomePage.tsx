@@ -166,7 +166,7 @@ const FakeNewsDetector: React.FC = () => {
               exit={{ opacity: 0, y: -20 }}
             >
               <div className="spinner"></div>
-              <p>Analyzing... please wait.</p>
+              <p className="text-center">Analyzing... please wait.</p>
             </motion.div>
           )}
         </AnimatePresence>
