@@ -1,5 +1,5 @@
-import React from 'react';
-import * as FA from 'react-icons/fa';
+import React from "react";
+import * as FA from "react-icons/fa";
 
 const MetricsExplanation: React.FC = () => {
   return (
@@ -25,8 +25,7 @@ const MetricsExplanation: React.FC = () => {
             <FA.FaMousePointer className="fas fa-mouse-pointer"></FA.FaMousePointer>{" "}
             <strong>Clickbait Detection:</strong>
           </p>
-          Whether the headline uses sensational language to attract
-          clicks.
+          Whether the headline uses sensational language to attract clicks.
         </li>
         <li>
           <p>

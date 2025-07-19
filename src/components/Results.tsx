@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import * as FA from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 import { FakeNewsAnalysis } from "../types";
 
 interface ResultsProps {
@@ -7,6 +8,8 @@ interface ResultsProps {
 }
 
 const Results: React.FC<ResultsProps> = ({ results }) => {
+  const [isSourcesOpen, setIsSourcesOpen] = useState(false);
+
   const verdictConfig = {
     "Very High": {
       class: "fas fa-check-circle",
@@ -52,6 +55,18 @@ const Results: React.FC<ResultsProps> = ({ results }) => {
     icon: FA.FaQuestionCircle,
     color: "#95a5a6",
   };
+
+  const sortedSources = (components?.claim_verification?.source_details || [])
+    .filter(
+      (source) =>
+        source.domain_type === "trusted" || source.domain_type === "neutral"
+    )
+    .sort((a, b) => {
+      if (a.domain_type === "trusted" && b.domain_type !== "trusted") return -1;
+      if (a.domain_type !== "trusted" && b.domain_type === "trusted") return 1;
+      return b.semantic_similarity - a.semantic_similarity;
+    })
+    .slice(0, 3);
 
   return (
     <div className="results-section">
@@ -105,6 +120,72 @@ const Results: React.FC<ResultsProps> = ({ results }) => {
           </div>
         )}
       </div>
+
+      {sortedSources.length > 0 && (
+        <div>
+          <motion.div
+            onClick={() => setIsSourcesOpen(!isSourcesOpen)}
+            className="w-fit h-12 flex gap-5 items-center hover:cursor-pointer"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <span className="font-semibold text-[15px]">
+              {isSourcesOpen ? "Hide" : "Show"} Top Sources
+            </span>
+            <motion.div
+              animate={{ rotate: isSourcesOpen ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <FA.FaChevronDown />
+            </motion.div>
+          </motion.div>
+          <AnimatePresence>
+            {isSourcesOpen && (
+              <motion.div
+                className="flex flex-col gap-5"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                {sortedSources.map((source, index) => (
+                  <motion.div
+                    key={index}
+                    className="border-b flex flex-col gap-1 border-gray-300 dark:border-gray-600 py-2"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <p className="truncate text-[15px]">
+                      URL:{" "}
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
+                      >
+                        {source.url}
+                      </a>
+                    </p>
+                    <p className="text-[15px]">
+                      Domain Type:{" "}
+                      <span
+                        className={`p-0 rounded-full text-sm font-semibold ${
+                          source.domain_type === "trusted"
+                            ? " text-green-500"
+                            : " text-yellow-300"
+                        }`}
+                      >
+                        {source.domain_type}
+                      </span>
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       <div className="result-details">
         <p>
