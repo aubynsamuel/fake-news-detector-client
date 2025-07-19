@@ -22,6 +22,6 @@ export const mockData: FakeNewsAnalysis = {
       suspicious_count: 0,
     },
     network: { score: 0.59, domain_diversity: 0.97 },
-    claim_verification: { score: 0.32 },
+    claim_verification: { score: 0.32, source_details: [] },
   },
 };

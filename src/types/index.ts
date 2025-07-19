@@ -1,3 +1,11 @@
+interface SourceDetails {
+  url: string;
+  semantic_similarity: number;
+  domain_weight: number;
+  domain_type: "neutral" | "suspicious" | "trusted" | string;
+  relevant_sentences: string[];
+}
+
 export interface FakeNewsAnalysis {
   headline: string;
   timestamp: string;
@@ -27,6 +35,7 @@ export interface FakeNewsAnalysis {
     };
     claim_verification: {
       score: number;
+      source_details: SourceDetails[];
     };
   };
 }
