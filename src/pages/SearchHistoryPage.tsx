@@ -16,6 +16,7 @@ import Sidebar from "../components/Sidebar";
 import Results from "../components/Results";
 import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
+import "../css/SearchHistoryStyles.css";
 
 interface SearchHistoryEntry {
   id: string;

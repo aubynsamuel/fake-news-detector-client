@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../config/firebase";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import "../css/App.css";
 
 const FakeNewsDetector: React.FC = () => {
   const { user } = useAuth();

@@ -165,7 +165,7 @@
   color: #6b7280;
 }
 
-.error-message {
+.auth-error-message {
   background-color: #fef2f2;
   border: 1px solid #fecaca;
   border-left: 5px solid #ef4444;
@@ -182,13 +182,13 @@
   font-size: 0.875rem;
 }
 
-.dark .error-message {
+.dark .auth-error-message {
   background-color: #450a0a;
   border-color: #7f1d1d;
   color: #fecaca;
 }
 
-.error-message p {
+.auth-error-message p {
   font-size: 0.875rem;
   margin: 0;
 }

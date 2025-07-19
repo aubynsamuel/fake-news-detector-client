@@ -1,6 +1,7 @@
 import { useAuth } from "../contexts/AuthContext";
 import AuthToggle from "./AuthPage";
 import HomeScreen from "./HomePage";
+import "../css/LoadingPage.css";
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center gap-2">

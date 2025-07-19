@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import { motion, AnimatePresence } from "framer-motion";
+import "../css/SettingsStyles.css";
 
 const SettingsPage: React.FC = () => {
   const { user } = useAuth();
@@ -83,7 +84,10 @@ const SettingsPage: React.FC = () => {
         setMessage({ type: "error", text: result.message });
       }
     } catch (error: any) {
-      setMessage({ type: "error", text: "Failed to send reset email. Please try again." });
+      setMessage({
+        type: "error",
+        text: "Failed to send reset email. Please try again.",
+      });
     } finally {
       setLoading(false);
     }

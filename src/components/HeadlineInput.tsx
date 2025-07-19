@@ -85,8 +85,8 @@ const HeadlineInput: React.FC<HeadlineInputProps> = ({
 
         {/* Error messages */}
         {shouldShowErrors && (
-          <div key={"index"} className="error-message">
-            <FaExclamationTriangle className="error-icon" />
+          <div key={"index"} className="input-error-message">
+            <FaExclamationTriangle className="input-error-icon" />
             <span>{validationErrors[0].message}</span>
           </div>
         )}
@@ -96,7 +96,9 @@ const HeadlineInput: React.FC<HeadlineInputProps> = ({
           onClick={enhancedAnalyzeHeadline}
           disabled={loading || hasErrors}
           aria-describedby={hasErrors ? "button-disabled-reason" : undefined}
-          title={!loading && hasErrors ? validationErrors[0].message : undefined}
+          title={
+            !loading && hasErrors ? validationErrors[0].message : undefined
+          }
         >
           {loading ? (
             <>
@@ -112,18 +114,18 @@ const HeadlineInput: React.FC<HeadlineInputProps> = ({
         </button>
 
         <style jsx>{`
-          .error-message {
+          .input-error-message {
             display: flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 4px;
           }
 
-          .error-message:last-child {
+          .input-error-message:last-child {
             margin-bottom: 0;
           }
 
-          .error-icon {
+          .input-error-icon {
             color: #dc3545;
             flex-shrink: 0;
           }

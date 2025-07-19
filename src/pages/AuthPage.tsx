@@ -8,6 +8,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { FaRobot } from "react-icons/fa";
 import { sendPasswordResetEmail } from "../lib/utils";
+import "../css/AuthStyles.css";
 
 const AuthToggle: React.FC = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -200,7 +201,7 @@ const AuthToggle: React.FC = () => {
               )}
 
               {error && (
-                <div className="error-message">
+                <div className="auth-error-message">
                   <p>{error}</p>
                 </div>
               )}
@@ -266,7 +267,7 @@ const AuthToggle: React.FC = () => {
               </div>
 
               {error && (
-                <div className="error-message">
+                <div className="auth-error-message">
                   <p>{error}</p>
                 </div>
               )}
