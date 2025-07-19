@@ -39,7 +39,7 @@
   background-color: var(--background-light);
   border: 1px solid var(--border-light);
   border-radius: 0.75rem;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   transition: all 0.2s ease;
 }
 
@@ -56,12 +56,12 @@
 
 .history-item-content {
   flex-grow: 1;
+  max-height: 4.8rem;
 }
 
 .history-headline {
   font-weight: 600;
   color: var(--text-light);
-  margin-bottom: 0.25rem;
 }
 
 [data-theme="dark"] .history-headline {
@@ -120,6 +120,7 @@
   }
   .search-history-container {
     background-color: transparent;
+    padding: 0.5rem;
   }
   [data-theme="dark"] .search-history-container {
     background-color: transparent;

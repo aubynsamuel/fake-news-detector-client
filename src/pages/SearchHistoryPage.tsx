@@ -129,26 +129,22 @@ const SearchHistoryPage: React.FC = () => {
           {!selectedResult ? (
             <div className="history-list">
               {history.map((entry) => (
-                <div key={entry.id} className="history-item">
-                  <div className="history-item-content">
+                <div
+                  key={entry.id}
+                  className="history-item hover:cursor-pointer"
+                  onClick={() => handleViewDetails(entry.results)}
+                >
+                  <div className="history-item-content overflow-y-scroll">
                     <p className="history-headline">
                       {entry.headline || "Headline not available"}
                     </p>
+
                     <span className="history-date">
                       {entry.timestamp?.toDate
                         ? new Date(entry.timestamp.toDate()).toLocaleString()
                         : "Date not available"}
                     </span>
                   </div>
-                  <button
-                    onClick={() => handleViewDetails(entry.results)}
-                    className="view-details-button"
-                    disabled={
-                      !entry.results || Object.keys(entry.results).length === 0
-                    }
-                  >
-                    View Details
-                  </button>
                 </div>
               ))}
             </div>
