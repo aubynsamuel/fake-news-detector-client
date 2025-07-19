@@ -110,24 +110,6 @@ const HeadlineInput: React.FC<HeadlineInputProps> = ({
             </>
           )}
         </button>
-
-        <style jsx>{`
-          .input-error-message {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-          }
-
-          .input-error-message:last-child {
-            margin-bottom: 0;
-          }
-
-          .input-error-icon {
-            color: #dc3545;
-            flex-shrink: 0;
-          }
-        `}</style>
       </div>
     </>
   );
