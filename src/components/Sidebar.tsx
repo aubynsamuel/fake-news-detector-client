@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../config/firebase";
-import { FaQuestionCircle, FaInfoCircle, FaRobot } from "react-icons/fa";
+import { FaRobot } from "react-icons/fa";
 import { User, LogOut, Edit3, X, History } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 

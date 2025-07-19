@@ -92,10 +92,8 @@ const HeadlineInput: React.FC<HeadlineInputProps> = ({
         )}
 
         <button
-          className={`analyze-button ${hasErrors ? "disabled" : ""}`}
+          className={`analyze-button`}
           onClick={enhancedAnalyzeHeadline}
-          disabled={loading || hasErrors}
-          aria-describedby={hasErrors ? "button-disabled-reason" : undefined}
           title={
             !loading && hasErrors ? validationErrors[0].message : undefined
           }
