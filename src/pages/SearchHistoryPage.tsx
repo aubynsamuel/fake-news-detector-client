@@ -135,12 +135,12 @@ const SearchHistoryPage: React.FC = () => {
                   className="history-item hover:cursor-pointer"
                   onClick={() => handleViewDetails(entry.results)}
                 >
-                  <div className="history-item-content overflow-y-scroll">
-                    <p className="history-headline">
+                  <div className="history-item-content truncate ">
+                    <p className="history-headline truncate">
                       {entry.headline || "Headline not available"}
                     </p>
 
-                    <span className="history-date">
+                    <span className="history-date truncate">
                       {entry.timestamp?.toDate
                         ? new Date(entry.timestamp.toDate()).toLocaleString()
                         : "Date not available"}
@@ -159,7 +159,7 @@ const SearchHistoryPage: React.FC = () => {
           )}
         </motion.div>
       </main>
-      <Footer />
+      {history.length > 0 && <Footer />}
     </div>
   );
 };

@@ -216,7 +216,7 @@ const FakeNewsDetector: React.FC = () => {
         </div>
       </main>
 
-      <Footer />
+      {results && <Footer />}
     </div>
   );
 };
