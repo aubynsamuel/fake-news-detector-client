@@ -28,7 +28,7 @@ const LoadingPage = () => {
             <LoadingSpinner />
           </div>
           <p className="text-slate-600 text-lg font-medium">
-            Loading authentication...
+            Loading...
           </p>
           <p className="text-slate-400 text-sm mt-2">
             Please wait while we verify your session
