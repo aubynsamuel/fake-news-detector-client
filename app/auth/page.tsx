@@ -24,6 +24,8 @@ const AuthToggle: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+    // track theme in state to avoid accessing `document` during server-side render
+    const [theme, setTheme] = useState<"light" | "dark">("light");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -97,20 +99,14 @@ const AuthToggle: React.FC = () => {
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark") {
-            document.documentElement.setAttribute("data-theme", "dark");
-        } else {
-            document.documentElement.setAttribute("data-theme", "light");
-        }
+        const t = savedTheme === "dark" ? "dark" : "light";
+        setTheme(t);
+        // also set attribute on document for CSS variables
+        document.documentElement.setAttribute("data-theme", t);
     }, []);
 
     return (
-        <div
-            className={`auth-container ${document.documentElement.getAttribute("data-theme") === "dark"
-                ? "dark"
-                : ""
-                }`}
-        >
+        <div className={`auth-container ${theme === "dark" ? "dark" : ""}`}>
             <div className="auth-wrapper">
                 <div className="auth-header">
                     <div className="auth-logo">

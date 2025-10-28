@@ -24,6 +24,8 @@ const SettingsPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState(user?.email || "");
+  // track theme locally to avoid accessing `document` during SSR/prerender
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleUpdateUsername = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,16 +92,16 @@ const SettingsPage: React.FC = () => {
         toggleSideBar={() => setIsSideBarOpen(false)}
       />
       <Header
-        darkMode={
-          document.documentElement.getAttribute("data-theme") === "dark"
-        }
+        darkMode={isDarkMode}
         setDarkMode={() => {
-          const newTheme =
-            document.documentElement.getAttribute("data-theme") === "dark"
-              ? "light"
-              : "dark";
-          document.documentElement.setAttribute("data-theme", newTheme);
-          localStorage.setItem("theme", newTheme);
+          const newTheme = isDarkMode ? "light" : "dark";
+          setIsDarkMode(!isDarkMode);
+          if (typeof document !== "undefined") {
+            document.documentElement.setAttribute("data-theme", newTheme);
+          }
+          if (typeof window !== "undefined") {
+            localStorage.setItem("theme", newTheme);
+          }
         }}
         toggleSideBar={() => setIsSideBarOpen(true)}
       />

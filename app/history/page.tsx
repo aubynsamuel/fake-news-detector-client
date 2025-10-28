@@ -37,6 +37,8 @@ const SearchHistoryPage: React.FC = () => {
     null
   );
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  // track theme locally to avoid accessing `document` during SSR/prerender
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -72,6 +74,13 @@ const SearchHistoryPage: React.FC = () => {
     fetchHistory();
   }, [user]);
 
+  // initialize theme state on client only
+  useEffect(() => {
+    const saved = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
+    const initDark = saved === "dark" || (saved === null && false);
+    setIsDarkMode(initDark);
+  }, []);
+
   const handleViewDetails = (result: FakeNewsAnalysis) => {
     try {
       if (result && Object.keys(result).length > 0) {
@@ -98,16 +107,16 @@ const SearchHistoryPage: React.FC = () => {
         toggleSideBar={() => setIsSideBarOpen(false)}
       />
       <Header
-        darkMode={
-          document.documentElement.getAttribute("data-theme") === "dark"
-        }
+        darkMode={isDarkMode}
         setDarkMode={() => {
-          const newTheme =
-            document.documentElement.getAttribute("data-theme") === "dark"
-              ? "light"
-              : "dark";
-          document.documentElement.setAttribute("data-theme", newTheme);
-          localStorage.setItem("theme", newTheme);
+          const newTheme = isDarkMode ? "light" : "dark";
+          setIsDarkMode(!isDarkMode);
+          if (typeof document !== "undefined") {
+            document.documentElement.setAttribute("data-theme", newTheme);
+          }
+          if (typeof window !== "undefined") {
+            localStorage.setItem("theme", newTheme);
+          }
         }}
         toggleSideBar={() => setIsSideBarOpen(true)}
       />
