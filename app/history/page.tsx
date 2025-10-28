@@ -13,9 +13,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { FakeNewsAnalysis } from "@/types";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Sidebar from "@/components/Sidebar";
 import Results from "@/components/Results";
 import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
@@ -36,9 +34,6 @@ const SearchHistoryPage: React.FC = () => {
   const [selectedResult, setSelectedResult] = useState<FakeNewsAnalysis | null>(
     null
   );
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  // track theme locally to avoid accessing `document` during SSR/prerender
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -74,13 +69,6 @@ const SearchHistoryPage: React.FC = () => {
     fetchHistory();
   }, [user]);
 
-  // initialize theme state on client only
-  useEffect(() => {
-    const saved = typeof window !== "undefined" ? localStorage.getItem("theme") : null;
-    const initDark = saved === "dark" || (saved === null && false);
-    setIsDarkMode(initDark);
-  }, []);
-
   const handleViewDetails = (result: FakeNewsAnalysis) => {
     try {
       if (result && Object.keys(result).length > 0) {
@@ -101,27 +89,8 @@ const SearchHistoryPage: React.FC = () => {
   };
 
   return (
-    <div className="container-fluid">
-      <Sidebar
-        isVisible={isSideBarOpen}
-        toggleSideBar={() => setIsSideBarOpen(false)}
-      />
-      <Header
-        darkMode={isDarkMode}
-        setDarkMode={() => {
-          const newTheme = isDarkMode ? "light" : "dark";
-          setIsDarkMode(!isDarkMode);
-          if (typeof document !== "undefined") {
-            document.documentElement.setAttribute("data-theme", newTheme);
-          }
-          if (typeof window !== "undefined") {
-            localStorage.setItem("theme", newTheme);
-          }
-        }}
-        toggleSideBar={() => setIsSideBarOpen(true)}
-      />
-
-      <main className="main-content search-history-page">
+    <div className="w-full min-h-screen flex flex-col">
+      <main className="main-content search-history-page flex-1">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

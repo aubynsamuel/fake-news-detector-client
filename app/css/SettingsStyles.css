@@ -1,5 +1,5 @@
 .settings-page {
-  padding: 2rem 8rem;
+  padding: 4rem 8rem;
 }
 
 .settings-container {
@@ -218,9 +218,11 @@
   .settings-page {
     padding: 0rem 0.5rem;
   }
+
   .settings-container {
     background-color: transparent;
   }
+
   [data-theme="dark"] .settings-container {
     background-color: transparent;
   }

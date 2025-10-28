@@ -7,9 +7,7 @@ import { sendPasswordResetEmail } from "@/lib/passwordReset";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import { User, AlertCircle } from "lucide-react";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Sidebar from "@/components/Sidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import "../css/SettingsStyles.css";
 import { getFirebaseErrorMessage } from "@/utils/getFirebaseErrorMessage";
@@ -22,10 +20,7 @@ const SettingsPage: React.FC = () => {
     text: string;
   } | null>(null);
   const [loading, setLoading] = useState(false);
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState(user?.email || "");
-  // track theme locally to avoid accessing `document` during SSR/prerender
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleUpdateUsername = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,27 +81,8 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="container-fluid">
-      <Sidebar
-        isVisible={isSideBarOpen}
-        toggleSideBar={() => setIsSideBarOpen(false)}
-      />
-      <Header
-        darkMode={isDarkMode}
-        setDarkMode={() => {
-          const newTheme = isDarkMode ? "light" : "dark";
-          setIsDarkMode(!isDarkMode);
-          if (typeof document !== "undefined") {
-            document.documentElement.setAttribute("data-theme", newTheme);
-          }
-          if (typeof window !== "undefined") {
-            localStorage.setItem("theme", newTheme);
-          }
-        }}
-        toggleSideBar={() => setIsSideBarOpen(true)}
-      />
-
-      <main className="main-content settings-page">
+    <div className="w-full min-h-screen flex flex-col">
+      <main className="main-content settings-page flex-1">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

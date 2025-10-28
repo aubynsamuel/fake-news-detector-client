@@ -6,20 +6,20 @@ import Link from "next/link";
 interface HeaderProps {
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
-  toggleSideBar: () => void;
+  setIsSideBarOpen: (value: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   darkMode,
   setDarkMode,
-  toggleSideBar,
+  setIsSideBarOpen,
 }) => {
 
   return (
     <header className="header">
       <div className="header-content">
         <div className="flex ">
-          <button className="sidebar-toggle" onClick={toggleSideBar}>
+          <button className="sidebar-toggle" onClick={() => setIsSideBarOpen(true)}>
             <Menu />
           </button>
           <Link

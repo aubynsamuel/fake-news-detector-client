@@ -1,13 +1,11 @@
 "use client"
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { FakeNewsAnalysis } from "@/types";
-import Header from "@/components/Header";
 import HeadlineInput from "@/components/HeadlineInput";
 import Results from "@/components/Results";
 import Error from "@/components/Error";
 import MetricsExplanation from "@/components/MetricsExplanation";
 import Footer from "@/components/Footer";
-import Sidebar from "@/components/Sidebar";
 import { motion, AnimatePresence } from "framer-motion";
 // import { mockData } from "@/data/mockServerResponse";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,42 +13,14 @@ import { db } from "@/config/firebase";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import "../css/App.css";
 
-const FakeNewsDetector: React.FC = () => {
+const HomePage: React.FC = () => {
   const { user } = useAuth();
   const [headline, setHeadline] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<FakeNewsAnalysis | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [darkMode, setDarkMode] = useState(false);
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-theme",
-      darkMode ? "dark" : "light"
-    );
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-
-  useEffect(() => {
-    if (isSideBarOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isSideBarOpen]);
 
   const analyzeHeadline = async () => {
     const trimmedHeadline = headline.trim();
@@ -137,18 +107,8 @@ const FakeNewsDetector: React.FC = () => {
   };
 
   return (
-    <div className={`container-fluid ${darkMode ? "dark" : ""}`}>
-      <Sidebar
-        isVisible={isSideBarOpen}
-        toggleSideBar={() => setIsSideBarOpen(false)}
-      />
-      <Header
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        toggleSideBar={() => setIsSideBarOpen(true)}
-      />
-
-      <main className="main-content">
+    <div className={`w-full min-h-screen flex flex-col`}>
+      <main className="main-content flex-1">
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="hero-title">
@@ -208,9 +168,9 @@ const FakeNewsDetector: React.FC = () => {
         </div>
       </main>
 
-      {results && <Footer />}
+      {<Footer />}
     </div>
   );
 };
 
-export default FakeNewsDetector;
+export default HomePage;

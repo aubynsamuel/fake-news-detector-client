@@ -118,10 +118,12 @@
   .search-history-page {
     padding: 0rem 0.5rem;
   }
+
   .search-history-container {
     background-color: transparent;
     padding: 0.5rem;
   }
+
   [data-theme="dark"] .search-history-container {
     background-color: transparent;
   }

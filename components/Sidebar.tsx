@@ -10,10 +10,10 @@ import Link from "next/link";
 
 interface SideBarProps {
   isVisible: boolean;
-  toggleSideBar: () => void;
+  setIsSideBarOpen: React.Dispatch<boolean>;
 }
 
-const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
+const Sidebar: React.FC<SideBarProps> = ({ isVisible, setIsSideBarOpen }) => {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -24,10 +24,6 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
     } catch (error) {
       console.error("Error signing out:", error);
     }
-  };
-
-  const handleSettingsNav = () => {
-    toggleSideBar();
   };
 
   const backdropVariants = {
@@ -46,7 +42,7 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
         <>
           <motion.div
             className="sidebar-backdrop"
-            onClick={toggleSideBar}
+            onClick={() => setIsSideBarOpen(false)}
             initial="hidden"
             animate="visible"
             exit="hidden"
@@ -62,7 +58,7 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             <div className="sidebar-header">
-              <button onClick={toggleSideBar} className="close-button">
+              <button onClick={() => setIsSideBarOpen(false)} className="close-button">
                 <X size={24} />
               </button>
             </div>
@@ -81,6 +77,7 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
               <Link
                 href="/home"
                 className="nav-item"
+                onClick={() => setIsSideBarOpen(false)}
               >
                 <FaRobot size={18} />
                 <span>Home</span>
@@ -89,12 +86,15 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
               <Link
                 href="/history"
                 className="nav-item"
+                onClick={() => setIsSideBarOpen(false)}
               >
                 <History size={18} />
                 <span>Search History</span>
               </Link>
 
-              <Link href="/settings" onClick={handleSettingsNav} className="nav-item">
+              <Link href="/settings"
+                onClick={() => setIsSideBarOpen(false)}
+                className="nav-item">
                 <Edit3 size={18} />
                 <span>Settings</span>
               </Link>
@@ -108,8 +108,9 @@ const Sidebar: React.FC<SideBarProps> = ({ isVisible, toggleSideBar }) => {
             </div>
           </motion.div>
         </>
-      )}
-    </AnimatePresence>
+      )
+      }
+    </AnimatePresence >
   );
 };
 

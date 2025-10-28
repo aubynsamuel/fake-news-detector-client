@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -11,8 +11,8 @@ import { setDoc, doc } from "firebase/firestore";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { FaRobot } from "react-icons/fa";
 import { sendPasswordResetEmail } from "@/lib/passwordReset";
-import "../css/AuthStyles.css";
 import { getFirebaseErrorMessage } from "@/utils/getFirebaseErrorMessage";
+import "../css/AuthStyles.css";
 
 const AuthToggle: React.FC = () => {
     const [isSignIn, setIsSignIn] = useState(true);
@@ -24,8 +24,6 @@ const AuthToggle: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
-    // track theme in state to avoid accessing `document` during server-side render
-    const [theme, setTheme] = useState<"light" | "dark">("light");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -97,16 +95,8 @@ const AuthToggle: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        const savedTheme = localStorage.getItem("theme");
-        const t = savedTheme === "dark" ? "dark" : "light";
-        setTheme(t);
-        // also set attribute on document for CSS variables
-        document.documentElement.setAttribute("data-theme", t);
-    }, []);
-
     return (
-        <div className={`auth-container ${theme === "dark" ? "dark" : ""}`}>
+        <div className={`auth-container`}>
             <div className="auth-wrapper">
                 <div className="auth-header">
                     <div className="auth-logo">

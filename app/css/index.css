@@ -15,6 +15,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@theme {
+  --color-primary-color: #3b82f6;
+  --color-secondary-color: #10b981;
+  --color-background-light: #f1f5f9;
+  --color-background-dark: #1e293b;
+  --color-text-light: #1e293b;
+  --color-text-dark: #e2e8f0;
+  --color-card-light: #ffffff;
+  --color-card-dark: #334155;
+  --color-border-light: #cbd5e1;
+  --color-border-dark: #475569;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

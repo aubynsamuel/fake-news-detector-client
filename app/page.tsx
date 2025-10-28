@@ -2,22 +2,9 @@
 
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import "./css/LoadingPage.css";
 import { useRouter } from "next/navigation";
-
-const LoadingSpinner = () => (
-    <div className="flex items-center justify-center gap-2">
-        <div className="w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
-        <div
-            className="w-4 h-4 bg-blue-600 rounded-full animate-pulse"
-            style={{ animationDelay: "0.3s" }}
-        ></div>
-        <div
-            className="w-4 h-4 bg-blue-700 rounded-full animate-pulse"
-            style={{ animationDelay: "0.6s" }}
-        ></div>
-    </div>
-);
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import "./css/LoadingPage.css";
 
 const LoadingPage = () => {
     const { loading, user } = useAuth();
@@ -34,7 +21,7 @@ const LoadingPage = () => {
     }, [loading, router, user])
 
     return (
-        <div className="w-[100dvw] h-[100dvh] bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="w-screen h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
             <div className="text-center">
                 <div className="mb-6">
                     <LoadingSpinner />
